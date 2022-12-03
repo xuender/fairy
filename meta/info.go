@@ -21,10 +21,10 @@ var _formats = [...][2]string{
 
 // Info 文件信息.
 type Info struct {
-	Path    string
-	Meta    pb.Meta
-	Created time.Time
-	Error   error
+	Path  string
+	Meta  pb.Meta
+	Date  time.Time
+	Error error
 }
 
 func NewInfoError(path string, err error) *Info {
@@ -40,11 +40,11 @@ func (p Info) Target(format string) string {
 		format = regexp.MustCompile(str[0]).ReplaceAllString(format, str[1])
 	}
 
-	return p.Created.Format(format)
+	return p.Date.Format(format)
 }
 
 func (p Info) String() string {
-	return fmt.Sprintf("%s: %v %s %v", p.Path, p.Meta, p.Created.Format("2006-01-02 15:04:05"), p.Error)
+	return fmt.Sprintf("%s: %v %s %v", p.Path, p.Meta, p.Date.Format("2006-01-02 15:04:05"), p.Error)
 }
 
 func (p Info) Output(writer io.Writer) {
@@ -52,7 +52,7 @@ func (p Info) Output(writer io.Writer) {
 
 	if p.Error == nil {
 		fmt.Fprintf(writer, "类型: %v\n", p.Meta)
-		fmt.Fprintf(writer, "时间: %s\n", p.Created.Format("2006-01-02 15:04:05"))
+		fmt.Fprintf(writer, "时间: %s\n", p.Date.Format("2006-01-02 15:04:05"))
 
 		return
 	}

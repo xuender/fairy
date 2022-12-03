@@ -3,22 +3,21 @@ package cmd
 import (
 	"os"
 
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"github.com/xuender/oils/base"
+	"github.com/xuender/oils/logs"
 )
 
 // nolint: gochecknoglobals
 var rootCmd = &cobra.Command{
 	Use:   "fairy",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Short: "文件整理精灵",
+	Long:  `根据配置文件将监听目录中的文件/目录移动到合适的位置.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		InitWatch(cmd).Run()
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -31,5 +30,23 @@ func Execute() {
 
 // nolint: gochecknoinits
 func init() {
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	var cfgFile string
+
+	cobra.OnInitialize(func() {
+		if cfgFile != "" {
+			viper.SetConfigFile(cfgFile)
+		} else {
+			viper.AddConfigPath(base.Must1(homedir.Dir()))
+			viper.AddConfigPath(".")
+			viper.SetConfigType("toml")
+			viper.SetConfigName("fairy")
+		}
+
+		viper.AutomaticEnv()
+
+		if err := viper.ReadInConfig(); err == nil {
+			logs.Infow("加载配置文件", "file", viper.ConfigFileUsed())
+		}
+	})
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "配置文件 (默认: $HOME/fairy.toml)")
 }

@@ -6,5 +6,4 @@ option go_package = "./pb";
 message Path {
 	string dir = 1;
 	map<string,string> target = 3;
-	repeated string ignore = 2;
 }

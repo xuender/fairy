@@ -9,6 +9,7 @@ import (
 	"github.com/xuender/fairy/pb"
 	"github.com/xuender/oils/base"
 	"github.com/xuender/oils/logs"
+	"github.com/xuender/oils/oss"
 )
 
 type Service struct {
@@ -32,7 +33,7 @@ func NewService() *Service {
 
 // Info 文件目录信息获取.
 func (p *Service) Info(path string) *Info {
-	if newPath, err := filepath.Abs(path); err == nil {
+	if newPath, err := oss.Abs(path); err == nil {
 		path = newPath
 	} else {
 		return NewInfoError(path, err)
@@ -46,8 +47,8 @@ func (p *Service) Info(path string) *Info {
 	if fileInfo.IsDir() {
 		dirInfo := p.MatchDir(path)
 
-		if dirInfo.Created.IsZero() {
-			dirInfo.Created = fileInfo.ModTime()
+		if dirInfo.Date.IsZero() {
+			dirInfo.Date = fileInfo.ModTime()
 		}
 
 		return dirInfo
@@ -70,7 +71,7 @@ func (p *Service) Info(path string) *Info {
 		return p.MatchArchive(path)
 	}
 
-	return &Info{Meta: meta, Created: fileInfo.ModTime(), Path: path}
+	return &Info{Meta: meta, Date: fileInfo.ModTime(), Path: path}
 }
 
 func (p *Service) MatchArchive(path string) *Info {
@@ -78,7 +79,7 @@ func (p *Service) MatchArchive(path string) *Info {
 	counts := map[pb.Meta]int{}
 
 	if finfo, err := os.Stat(path); err == nil {
-		info.Created = finfo.ModTime()
+		info.Date = finfo.ModTime()
 	}
 
 	_ = archiver.Walk(path, func(entry archiver.File) error {
@@ -87,7 +88,7 @@ func (p *Service) MatchArchive(path string) *Info {
 		}
 
 		if p.times.Has(entry.Name()) {
-			info.Created = entry.ModTime()
+			info.Date = entry.ModTime()
 		}
 
 		if meta, has := p.dirs[entry.Name()]; has {
@@ -143,7 +144,7 @@ func (p *Service) MatchDir(dir string) *Info {
 
 		if p.times.Has(entry.Name()) {
 			if inf, err := entry.Info(); err == nil {
-				info.Created = inf.ModTime()
+				info.Date = inf.ModTime()
 			}
 		}
 

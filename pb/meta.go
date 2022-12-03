@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/h2non/filetype"
 	"github.com/xuender/oils/logs"
@@ -14,6 +15,8 @@ import (
 const (
 	_headSize = 265
 )
+
+var _documents = [...]string{".xlsx", ".pptx", ".docx"}
 
 // nolint: gochecknoglobals
 var caser = cases.Title(language.English)
@@ -33,14 +36,20 @@ func GetMetaByReader(readCloser io.ReadCloser) (Meta, error) {
 		return meta, err
 	}
 
-	logs.Debugw("GetMeta", "kind", kind)
+	logs.Debugw("GetMeta", "kind", kind, "sub", kind.MIME.Subtype, "pdf", kind.MIME.Subtype == "pdf")
 
-	if filetype.IsArchive(head) {
-		return Meta_Archive, nil
-	}
-
-	if filetype.IsImage(head) {
+	switch {
+	case filetype.IsImage(head):
 		return Meta_Image, nil
+	case filetype.IsDocument(head), kind.MIME.Subtype == "pdf":
+		return Meta_Documents, nil
+	case filetype.IsVideo(head):
+		return Meta_Video, nil
+	case filetype.IsAudio(head):
+		return Meta_Audio, nil
+	case filetype.IsArchive(head):
+		return Meta_Archive, nil
+	default:
 	}
 
 	if value, has := Meta_value[caser.String(kind.Extension)]; has {
@@ -73,6 +82,16 @@ func GetMeta(path string) (Meta, error) {
 
 	if meta == Meta_Unknown {
 		meta = GetMetaByExt(path)
+	}
+
+	if meta == Meta_Archive {
+		ext := filepath.Ext(path)
+
+		for _, doc := range _documents {
+			if strings.EqualFold(doc, ext) {
+				return Meta_Documents, nil
+			}
+		}
 	}
 
 	return meta, nil

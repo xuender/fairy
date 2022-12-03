@@ -1,3 +1,5 @@
+PACKAGE = github.com/xuender/fairy
+
 tools:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install github.com/spf13/cobra-cli@latest
@@ -24,3 +26,6 @@ lint-fix:
 
 proto:
 	protoc --go_out=. pb/*.proto
+
+wire:
+	wire gen ${PACKAGE}/cmd
