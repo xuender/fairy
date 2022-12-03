@@ -1,37 +1,13 @@
 # fairy
 
-文件目录规整工具
+文件目录规整精灵。
 
 ## 用法
 
-规整配置的目录
+监听分组目录，自动整理新文件到目标目录。
 
 ```shell
 fairy
-```
-
-### watch
-
-监听目录变化，持续规整
-
-```shell
-fairy watch
-```
-
-### add
-
-添加规整目录
-
-```shell
-fairy add [path]
-```
-
-### meta
-
-文件或目录类型识别
-
-```shell
-fairy meta [path]
 ```
 
 ### init
@@ -40,4 +16,28 @@ fairy meta [path]
 
 ```shell
 fairy init
+```
+
+### meta
+
+显示文件或目录类型。
+
+```shell
+fairy meta [path...]
+```
+
+### move
+
+移动文件或目录到分组目标目录.
+
+```shell
+fairy move [path...]
+```
+
+### scan
+
+主动扫描分组目录，移动文件到目标目录。
+
+```shell
+fairy scan
 ```
