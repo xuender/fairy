@@ -9,9 +9,9 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/xuender/fairy/meta"
+	"github.com/xuender/fairy/move"
 	"github.com/xuender/fairy/pb"
 	"github.com/xuender/fairy/ui"
-	"github.com/xuender/fairy/watch"
 )
 
 // Injectors from wire.go:
@@ -27,9 +27,9 @@ func InitUI(cmd *cobra.Command) *ui.Service {
 	return service
 }
 
-func InitWatch(cmd *cobra.Command) *watch.Service {
+func InitMove(cmd *cobra.Command) *move.Service {
 	config := pb.NewConfig(cmd)
 	service := meta.NewService()
-	watchService := watch.NewService(config, service)
-	return watchService
+	moveService := move.NewService(config, service)
+	return moveService
 }

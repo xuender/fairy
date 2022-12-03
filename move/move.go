@@ -1,4 +1,4 @@
-package watch
+package move
 
 import (
 	"os"
@@ -7,7 +7,8 @@ import (
 	"github.com/xuender/oils/oss"
 )
 
-func Mv(path, dir string) error {
+// Move 移动文件.
+func Move(path, dir string) error {
 	dir, err := oss.Abs(dir)
 	if err != nil {
 		return err

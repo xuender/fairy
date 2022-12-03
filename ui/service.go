@@ -24,28 +24,28 @@ func NewService(cfg *pb.Config) *Service {
 }
 
 func (p *Service) Init() {
-	p.cfg.Path = []*pb.Path{}
+	p.cfg.Group = []*pb.Group{}
 
 	for {
-		path := &pb.Path{Target: map[string]string{}}
-		dir := p.Prompt("请输入精灵目录")
-		path.Dir = dir
+		group := &pb.Group{Meta: map[string]string{}}
+		watch := p.Prompt("请输入要监听的精灵目录", "~/fairy")
+		group.Watch = watch
 
-		logs.Debugw("input", "dir", dir)
+		logs.Debugw("input", "dir", watch)
 
-		p.cfg.Path = append(p.cfg.Path, path)
+		p.cfg.Group = append(p.cfg.Group, group)
 
 		for {
 			meta := p.SelectMeta()
-			target := p.Prompt(fmt.Sprintf("输入 %v 类型目标目录", meta))
-			path.Target[meta.String()] = target
+			target := p.Prompt(fmt.Sprintf("输入 %v 类型目录设置", meta), fmt.Sprintf("~/%v/$yyyy/$mm/$dd", meta))
+			group.Meta[meta.String()] = target
 
-			if !p.Confirm("是否继续设置目标目录") {
+			if !p.Confirm("继续设置新类型") {
 				break
 			}
 		}
 
-		if !p.Confirm("是否创建下一个精灵目录") {
+		if !p.Confirm("是否创建下一个分组") {
 			break
 		}
 	}
@@ -98,9 +98,10 @@ func (p *Service) SelectMeta() pb.Meta {
 	return pb.Meta(index)
 }
 
-func (p *Service) Prompt(label string) string {
+func (p *Service) Prompt(label, def string) string {
 	prompt := promptui.Prompt{
-		Label: label,
+		Label:   label,
+		Default: def,
 		Validate: func(s string) error {
 			if s == "" {
 				return ErrDirEmpty

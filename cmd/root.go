@@ -14,14 +14,13 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "fairy",
 	Short: "文件整理精灵",
-	Long:  `根据配置文件将监听目录中的文件/目录移动到合适的位置.`,
+	Long:  `监听配置的目录，将文件移动到合适的位置.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		InitWatch(cmd).Run()
+		InitMove(cmd).Watch()
 	},
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// Execute 执行.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)

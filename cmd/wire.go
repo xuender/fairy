@@ -7,9 +7,9 @@ import (
 	"github.com/google/wire"
 	"github.com/spf13/cobra"
 	"github.com/xuender/fairy/meta"
+	"github.com/xuender/fairy/move"
 	"github.com/xuender/fairy/pb"
 	"github.com/xuender/fairy/ui"
-	"github.com/xuender/fairy/watch"
 )
 
 func InitMeta(cmd *cobra.Command) *meta.Service {
@@ -29,12 +29,12 @@ func InitUI(cmd *cobra.Command) *ui.Service {
 	return &ui.Service{}
 }
 
-func InitWatch(cmd *cobra.Command) *watch.Service {
+func InitMove(cmd *cobra.Command) *move.Service {
 	wire.Build(
 		meta.NewService,
 		pb.NewConfig,
-		watch.NewService,
+		move.NewService,
 	)
 
-	return &watch.Service{}
+	return &move.Service{}
 }

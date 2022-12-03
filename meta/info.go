@@ -11,12 +11,12 @@ import (
 
 // nolint: gochecknoglobals
 var _formats = [...][2]string{
-	{"%[yY]{4}", "2006"},
-	{"%[yY]{2}", "06"},
-	{"%[mM]{2}", "01"},
-	{"%[mM]{1}", "1"},
-	{"%[dD]{2}", "02"},
-	{"%[dD]{1}", "2"},
+	{"\\$[yY]{4}", "2006"},
+	{"\\$[yY]{2}", "06"},
+	{"\\$[mM]{2}", "01"},
+	{"\\$[mM]{1}", "1"},
+	{"\\$[dD]{2}", "02"},
+	{"\\$[dD]{1}", "2"},
 }
 
 // Info 文件信息.
@@ -47,6 +47,7 @@ func (p Info) String() string {
 	return fmt.Sprintf("%s: %v %s %v", p.Path, p.Meta, p.Date.Format("2006-01-02 15:04:05"), p.Error)
 }
 
+// Output 输出.
 func (p Info) Output(writer io.Writer) {
 	fmt.Fprintln(writer, p.Path)
 
