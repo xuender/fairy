@@ -1,0 +1,10 @@
+syntax = "proto3";
+package pb;
+option go_package = "./pb";
+import "pb/path.proto";
+
+// Config 配置信息.
+message Config {
+	repeated Path path = 1;
+	repeated string ignore = 2;
+}
