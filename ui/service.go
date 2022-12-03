@@ -67,7 +67,7 @@ func (p *Service) Save() {
 	defer file.Close()
 
 	encoder := toml.NewEncoder(file)
-	encoder.Encode(p.cfg)
+	_ = encoder.Encode(p.cfg)
 }
 
 func (p *Service) SelectMeta() pb.Meta {

@@ -16,6 +16,7 @@ const (
 	_headSize = 265
 )
 
+// nolint: gochecknoglobals
 var _documents = [...]string{".xlsx", ".pptx", ".docx"}
 
 // nolint: gochecknoglobals
@@ -36,7 +37,7 @@ func GetMetaByReader(readCloser io.ReadCloser) (Meta, error) {
 		return meta, err
 	}
 
-	logs.Debugw("GetMeta", "kind", kind, "sub", kind.MIME.Subtype, "pdf", kind.MIME.Subtype == "pdf")
+	logs.Debugw("GetMeta", "kind", kind, "sub", kind.MIME.Subtype)
 
 	switch {
 	case filetype.IsImage(head):
@@ -102,4 +103,6 @@ func init() {
 	filetype.AddType(".go", "Golang")
 	filetype.AddType(".java", "Java")
 	filetype.AddType(".js", "JavaScript")
+	filetype.AddType(".svg", "Image")
+	filetype.AddType(".xcf", "Image")
 }

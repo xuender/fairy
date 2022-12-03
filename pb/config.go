@@ -15,7 +15,7 @@ func NewConfig(cmd *cobra.Command) *Config {
 		if file, err := os.Open(viper.ConfigFileUsed()); err == nil {
 			defer file.Close()
 
-			toml.NewDecoder(file).Decode(cfg)
+			_ = toml.NewDecoder(file).Decode(cfg)
 		}
 	}
 

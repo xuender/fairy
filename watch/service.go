@@ -42,8 +42,9 @@ func (p *Service) Run() {
 			info := p.ms.Info(file)
 
 			if target, has := path.Target[info.Meta.String()]; has {
-				logs.Infow("mv", "path", file, "target", info.Target(target))
-				Mv(file, info.Target(target))
+				if Mv(file, info.Target(target)) == nil {
+					logs.Infow("mv", "path", file, "target", info.Target(target))
+				}
 			}
 		}
 	}
