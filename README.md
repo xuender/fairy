@@ -2,6 +2,12 @@
 
 文件目录管理精灵。
 
+## 安装
+
+```shell
+go install github.com/xuender/fairy@latest
+```
+
 ## 用法
 
 监听分组目录，自动移动文件到目标目录。
@@ -16,6 +22,14 @@ fairy
 
 ```shell
 fairy init
+```
+
+### install
+
+使用 crontab 设置自动启动。
+
+```shell
+fairy install
 ```
 
 ### meta

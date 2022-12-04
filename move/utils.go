@@ -13,6 +13,8 @@ import (
 	"github.com/xuender/oils/oss"
 )
 
+const _bufSize = 1024
+
 // Move 移动文件.
 func Move(path, dir string) error {
 	dir, err := oss.Abs(dir)
@@ -75,7 +77,7 @@ func Hash(path string) uint64 {
 	defer file.Close()
 
 	reader := bufio.NewReader(file)
-	buf := make([]byte, 1024)
+	buf := make([]byte, _bufSize)
 	hash := fnv.New64a()
 
 	for {
