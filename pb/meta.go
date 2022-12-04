@@ -105,4 +105,7 @@ func init() {
 	filetype.AddType(".js", "JavaScript")
 	filetype.AddType(".svg", "Image")
 	filetype.AddType(".xcf", "Image")
+	filetype.AddType(".rmvb", "Video")
+	filetype.AddType(".chm", "Documents")
+	filetype.AddType(".txt", "Documents")
 }
