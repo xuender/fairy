@@ -16,6 +16,10 @@ var rootCmd = &cobra.Command{
 	Short: "文件整理精灵",
 	Long:  `监听配置的目录，将文件移动到合适的位置.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if !base.Must1(cmd.Flags().GetBool("debug")) {
+			logs.RotateLog("/var", "tmp")
+		}
+
 		InitMove(cmd).Watch()
 	},
 }
@@ -29,9 +33,16 @@ func Execute() {
 
 // nolint: gochecknoinits
 func init() {
-	var cfgFile string
+	var (
+		cfgFile string
+		debug   bool
+	)
 
 	cobra.OnInitialize(func() {
+		if !debug {
+			logs.SetInfoLevel()
+		}
+
 		if cfgFile != "" {
 			viper.SetConfigFile(cfgFile)
 		} else {
@@ -48,4 +59,5 @@ func init() {
 		}
 	})
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "配置文件 (默认: $HOME/fairy.toml)")
+	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "d", false, "调试模式")
 }

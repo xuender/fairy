@@ -53,7 +53,14 @@ func (p *Service) Scan() {
 		dir := base.Must1(oss.Abs(group.Watch))
 		logs.Debugw("run", "dir", dir)
 
-		for _, entry := range base.Must1(os.ReadDir(dir)) {
+		entrys, err := os.ReadDir(dir)
+		if err != nil {
+			logs.Errorw("scan", "dir", dir, "error", err)
+
+			continue
+		}
+
+		for _, entry := range entrys {
 			if p.cfg.IsIgnore(entry.Name()) {
 				logs.Debugw("ignore", "name", entry.Name())
 
@@ -74,21 +81,36 @@ func (p *Service) Scan() {
 
 // Watch 监听分组目录.
 func (p *Service) Watch() {
-	logs.Info("watch")
-
 	watcher := base.Must1(fsnotify.NewWatcher())
 	defer watcher.Close()
 
 	go p.toScan(watcher)
 
+	paths := base.NewSet[string]()
+
 	for _, group := range p.cfg.Group {
 		path := base.Must1(oss.Abs(group.Watch))
 
+		if _, err := os.Stat(path); err != nil {
+			logs.Errorw("watch", "path", path, "err", err)
+			paths.Add(path)
+
+			continue
+		}
+
 		base.Must(watcher.Add(path))
-		logs.Debugw("watch", "path", path)
+		logs.Infow("watch", "path", path)
 	}
 
-	<-make(chan struct{})
+	for range time.Tick(time.Second) {
+		for path := range paths {
+			if _, err := os.Stat(path); err == nil {
+				base.Must(watcher.Add(path))
+				logs.Infow("watch", "path", path)
+				paths.Del(path)
+			}
+		}
+	}
 }
 
 func (p *Service) toScan(watcher *fsnotify.Watcher) {
