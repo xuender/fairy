@@ -51,11 +51,11 @@ func (p *Service) Move(num int, paths []string) {
 func (p *Service) Scan() {
 	for _, group := range p.cfg.Group {
 		dir := base.Must1(oss.Abs(group.Watch))
-		logs.Debugw("run", "dir", dir)
+		logs.Debugw("scan", "dir", dir)
 
 		entrys, err := os.ReadDir(dir)
 		if err != nil {
-			logs.Errorw("scan", "dir", dir, "error", err)
+			logs.Infow("不存在", "dir", dir, "error", err)
 
 			continue
 		}
@@ -92,7 +92,7 @@ func (p *Service) Watch() {
 		path := base.Must1(oss.Abs(group.Watch))
 
 		if _, err := os.Stat(path); err != nil {
-			logs.Errorw("watch", "path", path, "err", err)
+			logs.Infow("不存在", "path", path, "err", err)
 			paths.Add(path)
 
 			continue
@@ -123,6 +123,10 @@ func (p *Service) toScan(watcher *fsnotify.Watcher) {
 		case event, ok := <-watcher.Events:
 			if !ok {
 				return
+			}
+
+			if event.Has(fsnotify.Remove) {
+				continue
 			}
 
 			logs.Debugw("watch", "event", event)

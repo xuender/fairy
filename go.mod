@@ -5,6 +5,7 @@ go 1.18
 // replace github.com/xuender/oils => ../oils
 
 require (
+	github.com/dchest/siphash v1.2.3
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/h2non/filetype v1.1.3
