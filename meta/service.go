@@ -104,6 +104,10 @@ func (p *Service) MatchArchive(path string) *Info {
 			}
 		}
 
+		if len(counts) > 33 {
+			return archiver.ErrStopWalk
+		}
+
 		return nil
 	})
 

@@ -3,6 +3,7 @@ package move
 import (
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
@@ -16,8 +17,9 @@ import (
 
 // Service 文件移动服务.
 type Service struct {
-	cfg *pb.Config
-	ms  *meta.Service
+	cfg   *pb.Config
+	ms    *meta.Service
+	mutex sync.Mutex
 }
 
 // NewService 新建文件移动服务.
@@ -26,8 +28,9 @@ func NewService(
 	metaService *meta.Service,
 ) *Service {
 	return &Service{
-		cfg: cfg,
-		ms:  metaService,
+		cfg:   cfg,
+		ms:    metaService,
+		mutex: sync.Mutex{},
 	}
 }
 
@@ -49,6 +52,9 @@ func (p *Service) Move(num int, paths []string) {
 
 // Scan 扫描分组目录.
 func (p *Service) Scan() {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
+
 	for _, group := range p.cfg.Group {
 		dir := base.Must1(oss.Abs(group.Watch))
 		logs.Debugw("scan", "dir", dir)
@@ -71,8 +77,10 @@ func (p *Service) Scan() {
 			info := p.ms.Info(file)
 
 			if target, has := group.Meta[info.Meta.String()]; has {
-				if Move(file, info.Target(target)) == nil {
+				if err := Move(file, info.Target(target)); err == nil {
 					logs.Infow("mv", "path", file, "target", info.Target(target))
+				} else {
+					logs.Warn(err)
 				}
 			}
 		}

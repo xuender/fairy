@@ -37,10 +37,14 @@ func NewInfoError(path string, err error) *Info {
 // Target 根据格式生成目的目录.
 func (p Info) Target(format string) string {
 	for _, str := range _formats {
-		format = regexp.MustCompile(str[0]).ReplaceAllString(format, str[1])
+		reg := regexp.MustCompile(str[0])
+
+		if reg.MatchString(format) {
+			format = reg.ReplaceAllString(format, p.Date.Format(str[1]))
+		}
 	}
 
-	return p.Date.Format(format)
+	return format
 }
 
 func (p Info) String() string {

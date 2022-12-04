@@ -20,4 +20,5 @@ func TestInfo_Target(t *testing.T) {
 	ass.Equal("[06]", info.Target("[$Yy]"))
 	ass.Equal("[01]", info.Target("[$mm]"))
 	ass.Equal("[2]", info.Target("[$d]"))
+	ass.Equal("06[2]", info.Target("06[$d]"))
 }

@@ -22,8 +22,12 @@ func Move(path, dir string) error {
 		return err
 	}
 
-	if err := os.MkdirAll(dir, oss.DefaultDirFileMod); err != nil {
-		return err
+	if !oss.Exist(dir) {
+		logs.Debugw("mkdir", "dir", dir)
+
+		if err := os.MkdirAll(dir, oss.DefaultDirFileMod); err != nil {
+			return err
+		}
 	}
 
 	name := filepath.Base(path)
