@@ -26,7 +26,10 @@ func init() {
 				return
 			}
 
-			command := fmt.Sprintf("@reboot %s\n", os.Args[0])
+			file := base.Must1(exec.LookPath(os.Args[0]))
+			logs.Debugw("install", "file", file)
+
+			command := fmt.Sprintf("@reboot %s\n", file)
 
 			if str != "" {
 				command = str + command
