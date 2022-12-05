@@ -112,4 +112,5 @@ func init() {
 	filetype.AddType(".chm", "Documents")
 	filetype.AddType(".txt", "Documents")
 	filetype.AddType(".iso", "Archive")
+	filetype.AddType(".mp3", "Audio")
 }
