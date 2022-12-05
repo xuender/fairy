@@ -61,7 +61,7 @@ func GetMetaByReader(readCloser io.ReadCloser) (Meta, error) {
 }
 
 func GetMetaByExt(path string) Meta {
-	kind := filetype.GetType(filepath.Ext(path))
+	kind := filetype.GetType(strings.ToLower(filepath.Ext(path)))
 
 	if value, has := Meta_value[caser.String(kind.MIME.Type)]; has {
 		return Meta(value)
@@ -106,6 +106,10 @@ func init() {
 	filetype.AddType(".svg", "Image")
 	filetype.AddType(".xcf", "Image")
 	filetype.AddType(".rmvb", "Video")
+	filetype.AddType(".rm", "Video")
+	filetype.AddType(".mpg", "Video")
+	filetype.AddType(".mov", "Video")
 	filetype.AddType(".chm", "Documents")
 	filetype.AddType(".txt", "Documents")
+	filetype.AddType(".iso", "Archive")
 }

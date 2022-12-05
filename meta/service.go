@@ -104,7 +104,7 @@ func (p *Service) MatchArchive(path string) *Info {
 			}
 		}
 
-		if len(counts) > 33 {
+		if len(counts) > 13 {
 			return archiver.ErrStopWalk
 		}
 
@@ -174,6 +174,11 @@ func (p *Service) WalkDir(dir string) *Info {
 		}
 
 		if meta, err := pb.GetMeta(path); err == nil {
+
+			if meta == pb.Meta_Archive {
+				meta = p.MatchArchive(path).Meta
+			}
+
 			if count, has := counts[meta]; has {
 				counts[meta] = count + 1
 			} else {
