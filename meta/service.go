@@ -12,6 +12,8 @@ import (
 	"github.com/xuender/oils/oss"
 )
 
+const _matchFiles = 13
+
 type Service struct {
 	times base.Set[string]
 	dirs  map[string]pb.Meta
@@ -104,7 +106,7 @@ func (p *Service) MatchArchive(path string) *Info {
 			}
 		}
 
-		if len(counts) > 13 {
+		if len(counts) >= _matchFiles {
 			return archiver.ErrStopWalk
 		}
 
@@ -174,7 +176,6 @@ func (p *Service) WalkDir(dir string) *Info {
 		}
 
 		if meta, err := pb.GetMeta(path); err == nil {
-
 			if meta == pb.Meta_Archive {
 				meta = p.MatchArchive(path).Meta
 			}

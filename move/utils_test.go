@@ -10,7 +10,7 @@ import (
 func TestHash(t *testing.T) {
 	t.Parallel()
 
-	assert.Equal(t, uint64(0xc72cc07ab5e1f842), move.Hash("utils.go"))
+	assert.Equal(t, uint64(0x1f9bf4792cb99cce), move.Hash("utils.go"))
 }
 
 func TestEqual(t *testing.T) {
