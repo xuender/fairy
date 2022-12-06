@@ -2,6 +2,7 @@ module github.com/xuender/fairy
 
 go 1.18
 
+// replace github.com/xuender/startup => ../startup
 // replace github.com/xuender/oils => ../oils
 
 require (
@@ -17,7 +18,7 @@ require (
 	github.com/spf13/viper v1.14.0
 	github.com/stretchr/testify v1.8.1
 	github.com/xuender/oils v0.5.48
-	github.com/xuender/startup v1.0.2
+	github.com/xuender/startup v1.0.3
 	golang.org/x/text v0.4.0
 	google.golang.org/protobuf v1.28.1
 )

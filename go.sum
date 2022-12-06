@@ -225,8 +225,8 @@ github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 h1:nIPpBwaJSVYIxUFsDv3M8ofm
 github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8/go.mod h1:HUYIGzjTL3rfEspMxjDjgmT5uz5wzYJKVo23qUhYTos=
 github.com/xuender/oils v0.5.48 h1:KFtxoM/DQiHa1fuCOYKRV0qAl20z1/k0DmfEHJYPzyA=
 github.com/xuender/oils v0.5.48/go.mod h1:dqcQUxB4tBY7Wdyf8pYgPEl4i1ZsHxFv3PA2bQaK0T0=
-github.com/xuender/startup v1.0.2 h1:frD7A5FzTRX+IeRZluKWHGpvNk9bUEY032EaXf5lBr8=
-github.com/xuender/startup v1.0.2/go.mod h1:8FkSVgTN0k4Vd5Ov+9KqkYWb9iM0FH29WR2+mhQIhtg=
+github.com/xuender/startup v1.0.3 h1:dUGVvHXca10F5LrHVYPAvQULbdR9sjbE0x0NlPlnxw8=
+github.com/xuender/startup v1.0.3/go.mod h1:8FkSVgTN0k4Vd5Ov+9KqkYWb9iM0FH29WR2+mhQIhtg=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
