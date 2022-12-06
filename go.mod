@@ -5,7 +5,6 @@ go 1.18
 // replace github.com/xuender/oils => ../oils
 
 require (
-	github.com/dchest/siphash v1.2.3
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/h2non/filetype v1.1.3
@@ -18,6 +17,7 @@ require (
 	github.com/spf13/viper v1.14.0
 	github.com/stretchr/testify v1.8.1
 	github.com/xuender/oils v0.5.48
+	github.com/xuender/startup v1.0.2
 	golang.org/x/text v0.4.0
 	google.golang.org/protobuf v1.28.1
 )
