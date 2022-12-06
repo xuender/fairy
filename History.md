@@ -1,4 +1,12 @@
 
+1.0.3 / 2022-12-06
+==================
+
+* feat: install, uninstall
+* refactor: matchFiles
+* feat: add mp3
+* fix: install 路径错误
+
 1.0.2 / 2022-12-05
 ==================
 
