@@ -1,0 +1,8 @@
+Website = "https://example.com"
+
+[Details]
+  Icon = "doc/logo.png"
+  Name = "Fairy"
+  ID = "com.github.xuender.fairy"
+  Version = "1.0.0"
+  Build = 2

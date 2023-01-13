@@ -1,6 +1,7 @@
 PACKAGE = github.com/xuender/fairy
 
 tools:
+	go install fyne.io/fyne/v2/cmd/fyne@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install github.com/spf13/cobra-cli@latest
 	go install github.com/google/wire/cmd/wire@latest
@@ -16,7 +17,8 @@ clean:
 	rm -rf dist
 
 build:
-	go build -o dist/fairy main.go
+	# go build -o dist/fairy main.go
+	fyne package -os linux
 
 lint:
 	golangci-lint run --timeout 60s --max-same-issues 50 ./...
