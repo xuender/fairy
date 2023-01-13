@@ -18,6 +18,7 @@ import (
 	"github.com/xuender/oils/logs"
 )
 
+// nolint: gochecknoglobals
 var _metaCN = map[string]string{
 	"Unknown":     "未知",
 	"Image":       "图片",
@@ -53,7 +54,7 @@ func NewUI(cfg *pb.Config) *UI {
 
 func (p *UI) Run() {
 	border := container.NewBorder(p.createToolbar(), nil, nil, nil, p.tabs)
-
+	// nolint: gomnd
 	p.main.Resize(fyne.NewSize(800, 600))
 	p.main.SetContent(border)
 	p.main.CenterOnScreen()
@@ -80,28 +81,28 @@ func (p *UI) group2TabItem(group *pb.Group) *container.TabItem {
 	items := make([]*widget.FormItem, len(pb.Meta_name))
 	entries := make([]*widget.Entry, len(pb.Meta_name))
 
+	var selected *widget.Entry
+
 	for index, name := range pb.Meta_name {
 		entry := widget.NewEntry()
-		entry.PlaceHolder = "目标目录"
+		entry.SetPlaceHolder("目标目录")
 		entry.OnCursorChanged = func() {
-			if entry.Text != "" {
+			if entry.Text != "" || selected == entry {
 				return
 			}
 
-			entry.SetText(".")
-			dialog.ShowFolderOpen(func(lu fyne.ListableURI, err error) {
-				if err != nil || lu == nil || lu.Path() == "" {
+			selected = entry
+
+			ShowFolderOpen(func(uri fyne.ListableURI, err error) {
+				if err != nil || uri == nil {
 					entry.SetText("")
 
 					return
 				}
 
-				entry.SetText(lu.Path())
+				entry.SetText(uri.Path())
 			}, p.main)
 		}
-		// entry.OnChanged(func(str string) {
-		// 	log.Info(str)
-		// })
 
 		if path, has := group.Meta[name]; has {
 			entry.SetText(path)
@@ -162,20 +163,28 @@ func (p *UI) createToolbar() *widget.Toolbar {
 	return widget.NewToolbar(items...)
 }
 
+func ShowFolderOpen(callback func(fyne.ListableURI, error), parent fyne.Window) {
+	dialog := dialog.NewFolderOpen(callback, parent)
+
+	dialog.SetConfirmText("选择目录")
+	dialog.SetDismissText("取消")
+	dialog.Show()
+}
+
 func (p *UI) createGroup() {
-	dialog.ShowFolderOpen(func(lu fyne.ListableURI, err error) {
+	ShowFolderOpen(func(uri fyne.ListableURI, err error) {
 		if err != nil {
 			dialog.ShowError(err, p.main)
 
 			return
 		}
 
-		if lu == nil || lu.Path() == "" {
+		if uri == nil || uri.Path() == "" {
 			return
 		}
 
 		for _, group := range p.cfg.Group {
-			if group.Watch == lu.Path() {
+			if group.Watch == uri.Path() {
 				dialog.ShowInformation("路径重复", group.Watch, p.main)
 
 				return
@@ -183,9 +192,9 @@ func (p *UI) createGroup() {
 			// TODO 子目录校验
 		}
 
-		logs.Info(lu.Path())
+		logs.Info(uri.Path())
 
-		group := &pb.Group{Meta: map[string]string{}, Watch: lu.Path()}
+		group := &pb.Group{Meta: map[string]string{}, Watch: uri.Path()}
 		p.cfg.Group = append(p.cfg.Group, group)
 		p.Save()
 		item := p.group2TabItem(group)
@@ -196,6 +205,7 @@ func (p *UI) createGroup() {
 
 func (p *UI) Save() {
 	logs.Debug("save")
+
 	config := viper.ConfigFileUsed()
 
 	if config == "" {
@@ -220,7 +230,6 @@ func (p *UI) createCommands() {
 		{Help: "Separator"},
 		// {Help: "Full screen", Call: p.fullScreen, Icon: theme.ComputerIcon(), Key1: fyne.KeyF11},
 		// {Help: "Actual Size", Call: p.modeActual, Icon: theme.ViewRestoreIcon(), Key1: fyne.KeyAsterisk, Key2: fyne.Key8},
-		// {Help: "Fit to window", Call: p.modeWindow, Icon: theme.ViewFullScreenIcon(), Key1: fyne.KeySlash, Key2: fyne.KeyM},
 		// {Help: "Fit to width", Call: p.modeWidth, Icon: theme.MoreHorizontalIcon(), Key1: fyne.KeyW},
 		// {Help: "Fit to height", Call: p.modeHeight, Icon: theme.MoreVerticalIcon(), Key1: fyne.KeyH},
 		// {Help: "Zoom In", Call: p.zoomIn, Icon: theme.ZoomInIcon(), Key1: fyne.KeyPlus, Key2: fyne.KeyEqual},

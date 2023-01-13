@@ -15,7 +15,17 @@ type Theme struct {
 	regular, bold, italic, boldItalic, monospace fyne.Resource
 }
 
-var _fonts = [...]string{"wqy-zenhei", "wqy", "simhei.ttf", "simkai.ttf", "simsun.ttf", "STHeiti", "ukai.ttc", "uming.ttc"}
+// nolint: gochecknoglobals
+var _fonts = [...]string{
+	"wqy-zenhei",
+	"wqy",
+	"simhei.ttf",
+	"simkai.ttf",
+	"simsun.ttf",
+	"STHeiti",
+	"ukai.ttc",
+	"uming.ttc",
+}
 
 func NewTheme() *Theme {
 	fontPaths := findfont.List()
