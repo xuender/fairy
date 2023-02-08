@@ -1,10 +1,11 @@
 syntax = "proto3";
 package pb;
 option go_package = "./pb";
-import "pb/group.proto";
 
 // Config 配置信息.
 message Config {
-	repeated Group group = 1;
+	// Dirs 迁移目录.
+	map<string,string> dirs = 1;
+	// Ignore 忽略配置.
 	repeated string ignore = 2;
 }

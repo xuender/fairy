@@ -47,13 +47,14 @@ func NewUI(cfg *pb.Config) *UI {
 	ret.main = ret.app.NewWindow("Fairy")
 	ret.app.Settings().SetTheme(NewTheme())
 	ret.createCommands()
-	ret.tabs = ret.createTabs()
+	// ret.tabs = ret.createTabs()
 
 	return ret
 }
 
 func (p *UI) Run() {
-	border := container.NewBorder(p.createToolbar(), nil, nil, nil, p.tabs)
+	// border := container.NewBorder(p.createToolbar(), nil, nil, nil, p.tabs)
+	border := container.NewBorder(p.createToolbar(), nil, nil, nil, widget.NewLabel("xxx"))
 	// nolint: gomnd
 	p.main.Resize(fyne.NewSize(800, 600))
 	p.main.SetContent(border)
@@ -64,11 +65,11 @@ func (p *UI) Run() {
 }
 
 func (p *UI) createTabs() *container.AppTabs {
-	items := make([]*container.TabItem, len(p.cfg.Group))
+	items := make([]*container.TabItem, len(p.cfg.Dirs))
 
-	for index, group := range p.cfg.Group {
-		items[index] = p.group2TabItem(group)
-	}
+	// for index, dir := range p.cfg.Dirs {
+	// 	items[index] = p.group2TabItem(dir)
+	// }
 
 	tabs := container.NewAppTabs(items...)
 	// tabs.SetTabLocation(container.TabLocationBottom)
@@ -77,7 +78,7 @@ func (p *UI) createTabs() *container.AppTabs {
 	return tabs
 }
 
-func (p *UI) group2TabItem(group *pb.Group) *container.TabItem {
+func (p *UI) group2TabItem(meta pb.Meta, path string) *container.TabItem {
 	items := make([]*widget.FormItem, len(pb.Meta_name))
 	entries := make([]*widget.Entry, len(pb.Meta_name))
 
@@ -104,9 +105,9 @@ func (p *UI) group2TabItem(group *pb.Group) *container.TabItem {
 			}, p.main)
 		}
 
-		if path, has := group.Meta[name]; has {
-			entry.SetText(path)
-		}
+		// if path, has := dir.Meta[name]; has {
+		// 	entry.SetText(path)
+		// }
 
 		if chinese, has := _metaCN[name]; has {
 			name = chinese
@@ -125,7 +126,9 @@ func (p *UI) group2TabItem(group *pb.Group) *container.TabItem {
 					continue
 				}
 
-				group.Meta[pb.Meta_name[int32(index)]] = entry.Text
+				// dir.Meta = pb.Meta(index)
+				// dir.Path = entry.Text
+				logs.Info(index)
 			}
 
 			p.Save()
@@ -134,7 +137,7 @@ func (p *UI) group2TabItem(group *pb.Group) *container.TabItem {
 		},
 	}
 
-	return container.NewTabItem(group.Watch, form)
+	return container.NewTabItem("test", form)
 }
 
 func (p *UI) createToolbar() *widget.Toolbar {
@@ -183,23 +186,14 @@ func (p *UI) createGroup() {
 			return
 		}
 
-		for _, group := range p.cfg.Group {
-			if group.Watch == uri.Path() {
-				dialog.ShowInformation("路径重复", group.Watch, p.main)
-
-				return
-			}
-			// TODO 子目录校验
-		}
-
 		logs.Info(uri.Path())
 
-		group := &pb.Group{Meta: map[string]string{}, Watch: uri.Path()}
-		p.cfg.Group = append(p.cfg.Group, group)
+		// dir := &pb.Dir{}
+		// p.cfg.Dirs = append(p.cfg.Dirs, dir)
 		p.Save()
-		item := p.group2TabItem(group)
-		p.tabs.Append(item)
-		p.tabs.Select(item)
+		// item := p.group2TabItem(dir)
+		// p.tabs.Append(item)
+		// p.tabs.Select(item)
 	}, p.main)
 }
 

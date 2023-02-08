@@ -1,9 +1,0 @@
-syntax = "proto3";
-package pb;
-option go_package = "./pb";
-
-// Group 分组.
-message Group {
-	string watch = 1;
-	map<string,string> meta = 3;
-}

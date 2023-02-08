@@ -1,8 +1,6 @@
 package move
 
 import (
-	"os"
-	"path/filepath"
 	"sync"
 	"time"
 
@@ -35,16 +33,13 @@ func NewService(
 }
 
 // Move 根据分组配置移动文件.
-func (p *Service) Move(num int, paths []string) {
-	group := p.cfg.Group[num]
-
+func (p *Service) Move(paths []string) {
 	for _, path := range paths {
 		path = base.Must1(oss.Abs(path))
 		info := p.ms.Info(path)
-
-		if target, has := group.Meta[info.Meta.String()]; has {
-			if Move(path, info.Target(target)) == nil {
-				logs.Infow("mv", "path", path, "target", info.Target(target))
+		if dir, has := p.cfg.Dirs[info.Meta.String()]; has {
+			if Move(path, info.Target(dir)) == nil {
+				logs.Infow("mv", "path", path, "target", info.Target(dir))
 			}
 		}
 	}
@@ -55,70 +50,68 @@ func (p *Service) Scan() {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 
-	for _, group := range p.cfg.Group {
-		dir := base.Must1(oss.Abs(group.Watch))
+	for _, dir := range p.cfg.Dirs {
+		// 	entrys, err := os.ReadDir(dir)
+		// 	if err != nil {
+		// 		logs.Infow("不存在", "dir", dir, "error", err)
+
+		// 		continue
+		// 	}
+
+		// 	for _, entry := range entrys {
+		// 		if p.cfg.IsIgnore(entry.Name()) {
+		// 			logs.Debugw("ignore", "name", entry.Name())
+
+		// 			continue
+		// 		}
+
+		// 		file := filepath.Join(dir, entry.Name())
+		// 		info := p.ms.Info(file)
+
+		// 		if target, has := group.Meta[info.Meta.String()]; has {
+		// 			if err := Move(file, info.Target(target)); err == nil {
+		// 				logs.Infow("mv", "path", file, "target", info.Target(target))
+		// 			} else {
+		// 				logs.Warn(err)
+		// 			}
+		// 		}
+		// 	}
 		logs.Debugw("scan", "dir", dir)
-
-		entrys, err := os.ReadDir(dir)
-		if err != nil {
-			logs.Infow("不存在", "dir", dir, "error", err)
-
-			continue
-		}
-
-		for _, entry := range entrys {
-			if p.cfg.IsIgnore(entry.Name()) {
-				logs.Debugw("ignore", "name", entry.Name())
-
-				continue
-			}
-
-			file := filepath.Join(dir, entry.Name())
-			info := p.ms.Info(file)
-
-			if target, has := group.Meta[info.Meta.String()]; has {
-				if err := Move(file, info.Target(target)); err == nil {
-					logs.Infow("mv", "path", file, "target", info.Target(target))
-				} else {
-					logs.Warn(err)
-				}
-			}
-		}
 	}
 }
 
 // Watch 监听分组目录.
 func (p *Service) Watch() {
-	watcher := base.Must1(fsnotify.NewWatcher())
-	defer watcher.Close()
+	// watcher := base.Must1(fsnotify.NewWatcher())
+	// defer watcher.Close()
 
-	go p.toScan(watcher)
+	// go p.toScan(watcher)
 
-	paths := base.NewSet[string]()
+	// paths := base.NewSet[string]()
 
-	for _, group := range p.cfg.Group {
-		path := base.Must1(oss.Abs(group.Watch))
+	// for _, group := range p.cfg.Group {
+	// 	path := base.Must1(oss.Abs(group.Watch))
 
-		if _, err := os.Stat(path); err != nil {
-			logs.Infow("不存在", "path", path, "err", err)
-			paths.Add(path)
+	// 	if _, err := os.Stat(path); err != nil {
+	// 		logs.Infow("不存在", "path", path, "err", err)
+	// 		paths.Add(path)
 
-			continue
-		}
+	// 		continue
+	// 	}
 
-		base.Must(watcher.Add(path))
-		logs.Infow("watch", "path", path)
-	}
+	// 	base.Must(watcher.Add(path))
+	// 	logs.Infow("watch", "path", path)
+	// }
 
-	for range time.Tick(time.Second) {
-		for path := range paths {
-			if _, err := os.Stat(path); err == nil {
-				base.Must(watcher.Add(path))
-				logs.Infow("watch", "path", path)
-				paths.Del(path)
-			}
-		}
-	}
+	// for range time.Tick(time.Second) {
+	// 	for path := range paths {
+	// 		if _, err := os.Stat(path); err == nil {
+	// 			base.Must(watcher.Add(path))
+	// 			logs.Infow("watch", "path", path)
+	// 			paths.Del(path)
+	// 		}
+	// 	}
+	// }
 }
 
 func (p *Service) toScan(watcher *fsnotify.Watcher) {

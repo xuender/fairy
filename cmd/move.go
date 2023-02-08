@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/xuender/oils/base"
 )
 
 // nolint: gochecknoinits
@@ -13,7 +12,7 @@ func init() {
 		Long:  `根据选择的分组策略移动文件/目录到设置的位置.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) > 0 {
-				InitMove(cmd).Move(base.Must1(cmd.Flags().GetInt("group")), args)
+				InitMove(cmd).Move(args)
 			}
 		},
 	}
