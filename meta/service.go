@@ -7,24 +7,23 @@ import (
 
 	"github.com/mholt/archiver/v3"
 	"github.com/xuender/fairy/pb"
-	"github.com/xuender/oils/base"
-	"github.com/xuender/oils/logs"
-	"github.com/xuender/oils/oss"
+	"github.com/xuender/kit/logs"
+	"github.com/xuender/kit/oss"
 )
 
 const _matchFiles = 13
 
 type Service struct {
-	times base.Set[string]
+	times map[string]struct{}
 	dirs  map[string]pb.Meta
 }
 
 func NewService() *Service {
 	return &Service{
-		times: base.NewSet(
-			"LICENSE",
-			"typings.json",
-		),
+		times: map[string]struct{}{
+			"LICENSE":      {},
+			"typings.json": {},
+		},
 		dirs: map[string]pb.Meta{
 			"go.mod":       pb.Meta_Golang,
 			"pom.xml":      pb.Meta_Java,
@@ -67,7 +66,7 @@ func (p *Service) Info(path string) *Info {
 		return NewInfoError(path, err)
 	}
 
-	logs.Debugw("info", "path", path, "meta", meta)
+	logs.D.Println("info", "path", path, "meta", meta)
 
 	if meta == pb.Meta_Archive {
 		return p.MatchArchive(path)
@@ -89,7 +88,7 @@ func (p *Service) MatchArchive(path string) *Info {
 			return nil
 		}
 
-		if p.times.Has(entry.Name()) {
+		if _, has := p.times[entry.Name()]; has {
 			info.Date = entry.ModTime()
 		}
 
@@ -98,7 +97,7 @@ func (p *Service) MatchArchive(path string) *Info {
 		}
 
 		if meta, err := pb.GetMetaByReader(entry.ReadCloser); err == nil {
-			logs.Debugw("MatchArchive", "path", path, "meta", meta)
+			logs.D.Println("MatchArchive", "path", path, "meta", meta)
 			if count, has := counts[meta]; has {
 				counts[meta] = count + 1
 			} else {
@@ -148,7 +147,7 @@ func (p *Service) MatchDir(dir string) *Info {
 			continue
 		}
 
-		if p.times.Has(entry.Name()) {
+		if _, has := p.times[entry.Name()]; has {
 			if inf, err := entry.Info(); err == nil {
 				info.Date = inf.ModTime()
 			}

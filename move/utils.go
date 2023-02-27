@@ -9,8 +9,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/xuender/oils/logs"
-	"github.com/xuender/oils/oss"
+	"github.com/xuender/kit/logs"
+	"github.com/xuender/kit/oss"
 )
 
 const _bufSize = 1024
@@ -23,7 +23,7 @@ func Move(path, dir string) error {
 	}
 
 	if !oss.Exist(dir) {
-		logs.Debugw("mkdir", "dir", dir)
+		logs.D.Println("mkdir", "dir", dir)
 
 		if err := os.MkdirAll(dir, oss.DefaultDirFileMod); err != nil {
 			return err
@@ -37,13 +37,13 @@ func Move(path, dir string) error {
 
 	for {
 		if !oss.Exist(target) {
-			logs.Debugw("rename", "path", path, "target", target)
+			logs.D.Println("rename", "path", path, "target", target)
 
 			return os.Rename(path, target)
 		}
 
 		if Equal(path, target) {
-			logs.Debugw("remove", "path", path, "target", target)
+			logs.D.Println("remove", "path", path, "target", target)
 
 			return os.Remove(path)
 		}

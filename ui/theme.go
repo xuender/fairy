@@ -8,7 +8,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/theme"
 	"github.com/flopp/go-findfont"
-	"github.com/xuender/oils/logs"
+	"github.com/xuender/kit/logs"
 )
 
 type Theme struct {
@@ -35,7 +35,7 @@ func NewTheme() *Theme {
 			if strings.Contains(strings.ToLower(path), f) {
 				os.Setenv("FYNE_FONT", path)
 				// os.Setenv("FYNE_FONT_MONOSPACE", path)
-				logs.Info("字体初始化成功", path)
+				logs.I.Println("字体初始化成功", path)
 
 				ret := &Theme{}
 				ret.SetFonts(path, "")
@@ -106,7 +106,7 @@ func loadCustomFont(env, variant string, fallback fyne.Resource) fyne.Resource {
 
 	res, err := fyne.LoadResourceFromPath(variantPath)
 	if err != nil {
-		logs.Error("Error loading specified font", err)
+		logs.E.Println("Error loading specified font", err)
 
 		return fallback
 	}

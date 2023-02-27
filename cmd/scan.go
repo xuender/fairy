@@ -7,12 +7,14 @@ import (
 // nolint: gochecknoinits
 func init() {
 	scanCmd := &cobra.Command{
-		Use:   "scan",
-		Short: "扫描所有分组监听目录",
-		Long:  `扫描所有分组监听目录，并根据配置整理文件/目录.`,
+		Use:     "scan",
+		Short:   "扫描指定目录",
+		Long:    `扫描指定目录，并根据配置整理文件/目录.`,
+		Aliases: []string{"s"},
 		Run: func(cmd *cobra.Command, args []string) {
-			InitMove(cmd).Scan()
+			InitMove(cmd).Scan(args)
 		},
 	}
+
 	rootCmd.AddCommand(scanCmd)
 }

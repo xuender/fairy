@@ -7,12 +7,14 @@ import (
 // nolint: gochecknoinits
 func init() {
 	uiCmd := &cobra.Command{
-		Use:   "ui",
-		Short: "界面",
-		Long:  `界面.`,
+		Use:     "ui",
+		Short:   "界面",
+		Long:    `界面.`,
+		Aliases: []string{"u"},
 		Run: func(cmd *cobra.Command, args []string) {
 			InitGUI(cmd).Run()
 		},
 	}
+
 	rootCmd.AddCommand(uiCmd)
 }

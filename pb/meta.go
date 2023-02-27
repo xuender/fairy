@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/h2non/filetype"
-	"github.com/xuender/oils/logs"
+	"github.com/xuender/kit/logs"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )

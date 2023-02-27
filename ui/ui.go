@@ -14,8 +14,8 @@ import (
 	"github.com/pelletier/go-toml/v2"
 	"github.com/spf13/viper"
 	"github.com/xuender/fairy/pb"
-	"github.com/xuender/oils/base"
-	"github.com/xuender/oils/logs"
+	"github.com/xuender/kit/base"
+	"github.com/xuender/kit/logs"
 )
 
 // nolint: gochecknoglobals
@@ -54,7 +54,12 @@ func NewUI(cfg *pb.Config) *UI {
 
 func (p *UI) Run() {
 	// border := container.NewBorder(p.createToolbar(), nil, nil, nil, p.tabs)
-	border := container.NewBorder(p.createToolbar(), nil, nil, nil, widget.NewLabel("xxx"))
+	border := container.NewBorder(p.createToolbar(),
+		widget.NewLabel("b"),
+		widget.NewLabel("l"),
+		widget.NewLabel("r"),
+		widget.NewLabel("c"),
+	)
 	// nolint: gomnd
 	p.main.Resize(fyne.NewSize(800, 600))
 	p.main.SetContent(border)
@@ -128,7 +133,7 @@ func (p *UI) group2TabItem(meta pb.Meta, path string) *container.TabItem {
 
 				// dir.Meta = pb.Meta(index)
 				// dir.Path = entry.Text
-				logs.Info(index)
+				logs.I.Println(index)
 			}
 
 			p.Save()
@@ -186,7 +191,7 @@ func (p *UI) createGroup() {
 			return
 		}
 
-		logs.Info(uri.Path())
+		logs.I.Println(uri.Path())
 
 		// dir := &pb.Dir{}
 		// p.cfg.Dirs = append(p.cfg.Dirs, dir)
@@ -198,7 +203,7 @@ func (p *UI) createGroup() {
 }
 
 func (p *UI) Save() {
-	logs.Debug("save")
+	logs.D.Println("save")
 
 	config := viper.ConfigFileUsed()
 

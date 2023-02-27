@@ -11,9 +11,9 @@ import (
 	"github.com/pelletier/go-toml/v2"
 	"github.com/spf13/viper"
 	"github.com/xuender/fairy/pb"
-	"github.com/xuender/oils/base"
-	"github.com/xuender/oils/logs"
-	"github.com/xuender/oils/oss"
+	"github.com/xuender/kit/base"
+	"github.com/xuender/kit/logs"
+	"github.com/xuender/kit/oss"
 )
 
 type Service struct {
@@ -29,7 +29,7 @@ func (p *Service) Init() {
 
 	path := p.Prompt("请输入配置文件保存的目录", "~/fairy.toml")
 
-	logs.Debugw("input", "dir", path)
+	logs.D.Println("input", "dir", path)
 
 	for {
 		meta := p.SelectMeta()
@@ -40,7 +40,7 @@ func (p *Service) Init() {
 		}
 	}
 
-	logs.Info(p.cfg)
+	logs.I.Println(p.cfg)
 
 	p.Save(path)
 }
@@ -63,7 +63,7 @@ func (p *Service) Save(path string) {
 	encoder := toml.NewEncoder(file)
 	_ = encoder.Encode(p.cfg)
 
-	logs.Info("保存:", config)
+	logs.I.Println("保存:", config)
 }
 
 func (p *Service) SelectMeta() pb.Meta {

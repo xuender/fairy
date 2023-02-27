@@ -7,9 +7,10 @@ import (
 // nolint: gochecknoinits
 func init() {
 	initCmd := &cobra.Command{
-		Use:   "init",
-		Short: "初始化",
-		Long:  `根据输入初始化配置文件.`,
+		Use:     "init",
+		Short:   "初始化",
+		Long:    `根据输入初始化配置文件.`,
+		Aliases: []string{"i"},
 		Run: func(cmd *cobra.Command, args []string) {
 			InitUI(cmd).Init()
 		},

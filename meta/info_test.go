@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/xuender/fairy/meta"
-	"github.com/xuender/oils/base"
+	"github.com/xuender/kit/base"
 )
 
 func TestInfo_Target(t *testing.T) {
