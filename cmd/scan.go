@@ -12,7 +12,7 @@ func init() {
 		Long:    `扫描指定目录，并根据配置整理文件/目录.`,
 		Aliases: []string{"s"},
 		Run: func(cmd *cobra.Command, args []string) {
-			InitMove(cmd).Scan(args)
+			InitMove(cmd).Scan(args...)
 		},
 	}
 

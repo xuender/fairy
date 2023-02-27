@@ -1,4 +1,4 @@
-# fairy
+# Fairy
 
 文件目录管理精灵。
 
@@ -10,9 +10,11 @@ go install github.com/xuender/fairy@latest
 
 ## 用法
 
-监听分组目录，自动移动文件到目标目录。
+在目录中运行命令，根据目录下的配置，将文件移动到对应目录中。
 
 ```shell
+# config
+fairy init
 fairy
 ```
 
@@ -22,14 +24,6 @@ fairy
 
 ```shell
 fairy init
-```
-
-### install
-
-使用 crontab 设置自动启动。
-
-```shell
-fairy install
 ```
 
 ### meta
@@ -46,12 +40,4 @@ fairy meta [path...]
 
 ```shell
 fairy move [path...]
-```
-
-### scan
-
-主动扫描分组目录，移动文件到目标目录。
-
-```shell
-fairy scan
 ```

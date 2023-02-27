@@ -33,9 +33,3 @@ func InitMove(cmd *cobra.Command) *move.Service {
 	moveService := move.NewService(config, service)
 	return moveService
 }
-
-func InitGUI(cmd *cobra.Command) *ui.UI {
-	config := pb.NewConfig(cmd)
-	uiUI := ui.NewUI(config)
-	return uiUI
-}

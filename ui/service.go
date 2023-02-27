@@ -7,7 +7,6 @@ import (
 	"sort"
 
 	"github.com/manifoldco/promptui"
-	"github.com/mitchellh/go-homedir"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/spf13/viper"
 	"github.com/xuender/fairy/pb"
@@ -27,7 +26,7 @@ func NewService(cfg *pb.Config) *Service {
 func (p *Service) Init() {
 	p.cfg.Dirs = map[string]string{}
 
-	path := p.Prompt("请输入配置文件保存的目录", "~/fairy.toml")
+	path := p.Prompt("请输入配置文件保存的目录", "./fairy.toml")
 
 	logs.D.Println("input", "dir", path)
 
@@ -49,7 +48,7 @@ func (p *Service) Save(path string) {
 	config := viper.ConfigFileUsed()
 
 	if config == "" {
-		home := base.Must1(homedir.Dir())
+		home := base.Must1(os.UserHomeDir())
 		config = filepath.Join(home, "fairy.toml")
 	}
 

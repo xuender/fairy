@@ -1,0 +1,4 @@
+Ignore = ['README.md']
+
+[Dirs]
+Image = 'Image/$yyyy/$mm/$dd'

@@ -23,6 +23,10 @@ func NewConfig(cmd *cobra.Command) *Config {
 		cfg.Ignore = []string{"README.md"}
 	}
 
+	if viper.ConfigFileUsed() != "" {
+		cfg.Ignore = append(cfg.Ignore, viper.ConfigFileUsed())
+	}
+
 	return cfg
 }
 

@@ -38,12 +38,3 @@ func InitMove(cmd *cobra.Command) *move.Service {
 
 	return &move.Service{}
 }
-
-func InitGUI(cmd *cobra.Command) *ui.UI {
-	wire.Build(
-		pb.NewConfig,
-		ui.NewUI,
-	)
-
-	return &ui.UI{}
-}

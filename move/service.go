@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/samber/lo"
 	"github.com/xuender/fairy/meta"
 	"github.com/xuender/fairy/pb"
 	"github.com/xuender/kit/base"
@@ -36,17 +37,21 @@ func (p *Service) Move(paths []string) {
 }
 
 func (p *Service) move(path string) {
+	if lo.Contains(p.cfg.Ignore, path) {
+		return
+	}
+
 	info := p.ms.Info(path)
 
 	if dir, has := p.cfg.Dirs[info.Meta.String()]; has {
 		if Move(path, info.Target(dir)) == nil {
-			logs.I.Println("mv", "path", path, "target", info.Target(dir))
+			logs.I.Println("mv", path, info.Target(dir))
 		}
 	}
 }
 
 // Scan 扫描目录目录.
-func (p *Service) Scan(paths []string) {
+func (p *Service) Scan(paths ...string) {
 	for _, path := range paths {
 		path = base.Must1(oss.Abs(path))
 

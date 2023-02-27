@@ -3,7 +3,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/xuender/kit/base"
@@ -14,9 +13,14 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "fairy",
 	Short: "文件整理精灵",
-	Long:  `监听配置的目录，将文件移动到合适的位置.`,
+	Long:  `将文件移动到合适的位置.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		InitGUI(cmd).Run()
+		// InitGUI(cmd).Run()
+		if len(args) == 0 {
+			InitMove(cmd).Scan(".")
+		} else {
+			InitMove(cmd).Scan(args...)
+		}
 	},
 }
 
@@ -37,15 +41,14 @@ func init() {
 
 	cobra.OnInitialize(func() {
 		if !debug {
-			logs.SetLogFile("/var/tmp", "fairy.log")
 			logs.SetLevel(logs.Info)
 		}
 
 		if cfgFile != "" {
 			viper.SetConfigFile(cfgFile)
 		} else {
-			viper.AddConfigPath(base.Must1(homedir.Dir()))
 			viper.AddConfigPath(".")
+			viper.AddConfigPath(base.Must1(os.UserHomeDir()))
 			viper.SetConfigType("toml")
 			viper.SetConfigName("fairy")
 		}
@@ -53,7 +56,7 @@ func init() {
 		viper.AutomaticEnv()
 
 		if err := viper.ReadInConfig(); err == nil {
-			logs.I.Printf("加载配置文件: %s", viper.ConfigFileUsed())
+			logs.I.Println("Config:", viper.ConfigFileUsed())
 		}
 	})
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "配置文件 (默认: $HOME/fairy.toml)")

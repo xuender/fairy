@@ -37,7 +37,7 @@ func GetMetaByReader(readCloser io.ReadCloser) (Meta, error) {
 		return meta, err
 	}
 
-	logs.Debugw("GetMeta", "kind", kind, "sub", kind.MIME.Subtype)
+	logs.D.Println("GetMeta", "kind", kind, "sub", kind.MIME.Subtype)
 
 	switch {
 	case filetype.IsImage(head):

@@ -17,8 +17,7 @@ clean:
 	rm -rf dist
 
 build:
-	# go build -o dist/fairy main.go
-	fyne package -os linux
+	go build -o dist/fairy main.go
 
 lint:
 	golangci-lint run --timeout 60s --max-same-issues 50 ./...
