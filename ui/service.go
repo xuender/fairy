@@ -8,9 +8,9 @@ import (
 
 	"github.com/manifoldco/promptui"
 	"github.com/pelletier/go-toml/v2"
+	"github.com/samber/lo"
 	"github.com/spf13/viper"
 	"github.com/xuender/fairy/pb"
-	"github.com/xuender/kit/base"
 	"github.com/xuender/kit/logs"
 	"github.com/xuender/kit/oss"
 )
@@ -48,15 +48,15 @@ func (p *Service) Save(path string) {
 	config := viper.ConfigFileUsed()
 
 	if config == "" {
-		home := base.Must1(os.UserHomeDir())
+		home := lo.Must1(os.UserHomeDir())
 		config = filepath.Join(home, "fairy.toml")
 	}
 
 	if path != "" {
-		config = base.Must1(oss.Abs(path))
+		config = lo.Must1(oss.Abs(path))
 	}
 
-	file := base.Must1(os.Create(config))
+	file := lo.Must1(os.Create(config))
 	defer file.Close()
 
 	encoder := toml.NewEncoder(file)
@@ -106,7 +106,7 @@ func (p *Service) Prompt(label, def string) string {
 		},
 	}
 
-	return base.Must1(prompt.Run())
+	return lo.Must1(prompt.Run())
 }
 
 func (p *Service) Confirm(label string) bool {

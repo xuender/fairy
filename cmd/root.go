@@ -3,9 +3,9 @@ package cmd
 import (
 	"os"
 
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/xuender/kit/base"
 	"github.com/xuender/kit/logs"
 )
 
@@ -48,7 +48,7 @@ func init() {
 			viper.SetConfigFile(cfgFile)
 		} else {
 			viper.AddConfigPath(".")
-			viper.AddConfigPath(base.Must1(os.UserHomeDir()))
+			viper.AddConfigPath(lo.Must1(os.UserHomeDir()))
 			viper.SetConfigType("toml")
 			viper.SetConfigName("fairy")
 		}

@@ -7,7 +7,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/xuender/fairy/meta"
 	"github.com/xuender/fairy/pb"
-	"github.com/xuender/kit/base"
 	"github.com/xuender/kit/logs"
 	"github.com/xuender/kit/oss"
 )
@@ -32,7 +31,7 @@ func NewService(
 // Move 根据分组配置移动文件.
 func (p *Service) Move(paths []string) {
 	for _, path := range paths {
-		p.move(base.Must1(oss.Abs(path)))
+		p.move(lo.Must1(oss.Abs(path)))
 	}
 }
 
@@ -53,9 +52,9 @@ func (p *Service) move(path string) {
 // Scan 扫描目录目录.
 func (p *Service) Scan(paths ...string) {
 	for _, path := range paths {
-		path = base.Must1(oss.Abs(path))
+		path = lo.Must1(oss.Abs(path))
 
-		for _, entry := range base.Must1(os.ReadDir(path)) {
+		for _, entry := range lo.Must1(os.ReadDir(path)) {
 			p.move(filepath.Join(path, entry.Name()))
 		}
 	}
